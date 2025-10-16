@@ -1,0 +1,19 @@
+class Solution {
+    public int findSmallestInteger(int[] nums, int value) {
+  
+        Set<Integer> set = new HashSet<>();
+        int n = nums.length;
+        
+        for (int num : nums) {
+            int mod = ((num % value) + value) % value;  
+            set.add(mod);
+        }
+
+        int ans = 0;
+        while (true) {
+            int mod = ans % value;
+            if (!set.contains(mod)) return ans;
+            ans++;
+        }
+    }
+}
