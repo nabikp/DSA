@@ -1,0 +1,27 @@
+class Solution {
+    public String findLexSmallestString(String s, int a, int b) {
+        Set<String> seen = new HashSet<>();
+        Queue<String> queue = new LinkedList<>();
+        String smallest = s;
+
+        queue.add(s);
+        seen.add(s);
+
+        while (!queue.isEmpty()) {
+            String curr = queue.poll();
+            if (curr.compareTo(smallest) < 0) smallest = curr;
+
+            char[] chars = curr.toCharArray();
+            for (int i = 1; i < chars.length; i += 2) {
+                chars[i] = (char) ((chars[i] - '0' + a) % 10 + '0');
+            }
+            String addA = new String(chars);
+            if (seen.add(addA)) queue.add(addA);
+
+            String rotateB = curr.substring(curr.length() - b) + curr.substring(0, curr.length() - b);
+            if (seen.add(rotateB)) queue.add(rotateB);
+        }
+
+        return smallest;
+    }
+}
