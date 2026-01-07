@@ -1,0 +1,27 @@
+class Solution {
+    public int findMin(int[] nums) {
+        int left = 0;
+        int right = nums.length - 1;
+
+        // Loop until the left and right pointers converge
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+
+            // If the middle element is greater than the rightmost element,
+            // the minimum must be in the right half (including mid+1).
+            // This is because the right half is unsorted relative to the left.
+            if (nums[mid] > nums[right]) {
+                left = mid + 1;
+            } 
+            // If the middle element is less than or equal to the rightmost element,
+            // the minimum could be the middle element or somewhere in the left half.
+            // So we can eliminate the right half.
+            else {
+                right = mid;
+            }
+        }
+        
+        // When the loop terminates (left == right), we have found the minimum element.
+        return nums[left];
+    }
+}
