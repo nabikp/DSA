@@ -1,0 +1,46 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public TreeNode upsideDownBinaryTree(TreeNode root) {
+        TreeNode curNode = root;
+        TreeNode preNode = null;
+        TreeNode nextNode = null;
+        TreeNode tempNode = null;
+
+        while (curNode != null) {
+            // Save the next node to process (original left child)
+            nextNode = curNode.left;
+
+            // Reassign the current node's left child to the saved right child from the previous iteration
+            curNode.left = tempNode;
+            
+            // Save the current node's right child for the next iteration
+            tempNode = curNode.right;
+            
+            // Reassign the current node's right child to the previous node (original parent)
+            curNode.right = preNode;
+
+            // Move the 'previous' pointer to the current node for the next iteration
+            preNode = curNode;
+
+            // Move the 'current' pointer to the next node (original left child)
+            curNode = nextNode;
+        }
+        
+        // The last 'preNode' is the new root of the flipped tree
+        return preNode;
+    }
+}
