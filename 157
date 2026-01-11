@@ -1,0 +1,38 @@
+/* The read4 API is defined in the parent class Reader4.
+  int read4(char[] buf); */
+
+public class Solution extends Reader4 {
+    /**
+     * @param buf Destination buffer
+     * @param n   Maximum number of characters to read
+     * @return    The number of characters read
+     */
+    public int read(char[] buf, int n) {
+        int totalRead = 0;
+        char[] temp = new char[4];
+        boolean endOfFile = false;
+
+        while (!endOfFile && totalRead < n) {
+            // Read up to 4 characters into the temporary buffer
+            int count = read4(temp);
+
+            // Check if we have reached the end of the file
+            if (count < 4) {
+                endOfFile = true;
+            }
+
+            // Determine the number of characters to copy to the destination buffer (buf)
+            // It should be the minimum of the characters read (count) and the characters we still need to read (n - totalRead)
+            int charsToCopy = Math.min(count, n - totalRead);
+
+            // Copy characters from the temporary buffer to the destination buffer
+            for (int i = 0; i < charsToCopy; i++) {
+                buf[totalRead + i] = temp[i];
+            }
+
+            totalRead += charsToCopy;
+        }
+
+        return totalRead;
+    }
+}
