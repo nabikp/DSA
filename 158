@@ -1,0 +1,46 @@
+/* The read4 API is defined in the parent class Reader4.
+  int read4(char[] buf4); */
+
+public class Solution extends Reader4 {
+    /**
+     * @param buf Destination buffer
+     * @param n   Number of characters to read
+     * @return    The number of actual characters read
+     */
+    private int bufferPointer = 0;
+    private int bufferCounter = 0;
+    private char[] buffer = new char[4];
+
+    public int read(char[] buf, int n) {
+        int bytesRead = 0;
+        while (bytesRead < n) {
+            // If the buffer is empty, read 4 new characters
+            if (bufferPointer == 0) {
+                bufferCounter = read4(buffer);
+            }
+            
+            // If read4 returns 0, the end of the file is reached
+            if (bufferCounter == 0) {
+                break;
+            }
+            
+            // Calculate how many characters to copy in this iteration
+            int bytesToCopy = Math.min(n - bytesRead, bufferCounter - bufferPointer);
+            
+            // Copy characters from internal buffer to the destination buffer 'buf'
+            for (int i = 0; i < bytesToCopy; i++) {
+                buf[bytesRead + i] = buffer[bufferPointer + i];
+            }
+            
+            bufferPointer += bytesToCopy;
+            bytesRead += bytesToCopy;
+            
+            // Reset bufferPointer if all characters in the current internal buffer are consumed
+            if (bufferPointer >= bufferCounter) {
+                bufferPointer = 0;
+                bufferCounter = 0;
+            }
+        }
+        return bytesRead;
+    }
+}
