@@ -1,0 +1,41 @@
+import java.util.HashMap;
+import java.util.Map;
+
+class Solution {
+    /**
+     * Finds the length of the longest substring with at most two distinct characters.
+     * @param s The input string.
+     * @return The length of the longest substring.
+     */
+    public int lengthOfLongestSubstringTwoDistinct(String s) {
+        if (s == null || s.length() == 0) {
+            return 0;
+        }
+
+        // Map to store the count of each character in the current window
+        Map<Character, Integer> counts = new HashMap<>();
+        int left = 0;
+        int maxLength = 0;
+
+        // Iterate through the string using the right pointer
+        for (int right = 0; right < s.length(); right++) {
+            char rightChar = s.charAt(right);
+            counts.put(rightChar, counts.getOrDefault(rightChar, 0) + 1);
+
+            // Shrink the window from the left if the number of distinct characters exceeds 2
+            while (counts.size() > 2) {
+                char leftChar = s.charAt(left);
+                counts.put(leftChar, counts.get(leftChar) - 1);
+                if (counts.get(leftChar) == 0) {
+                    counts.remove(leftChar);
+                }
+                left++;
+            }
+
+            // Update the maximum length found so far
+            maxLength = Math.max(maxLength, right - left + 1);
+        }
+
+        return maxLength;
+    }
+}
